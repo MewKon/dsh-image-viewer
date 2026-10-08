@@ -1,0 +1,11 @@
+# Bilingual-pair consistency record: the git blob hash of each side as of the last
+# confirmed-consistent state. Both languages carry equal authority; after editing
+# either side, bring the other along and re-record with:
+#
+#   git hash-object --path README.md README.md
+#   git hash-object --path README.zh.md README.zh.md
+#
+# A hash that no longer matches `git ls-tree HEAD README.md` means the pair is
+# out of sync — one side was edited without the other.
+README.md: 98f2183de57b99c30b567c0beffdd4cbd14f808e
+README.zh.md: 4c4d6ab38d56d2438d221e2f7b71ad4e837048ee

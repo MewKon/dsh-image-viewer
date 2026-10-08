@@ -1,8 +1,7 @@
 {
   "name": "dsh-image-viewer",
   "version": "0.1.0",
-  "private": true,
-  "description": "DSH Web 界面的图片查看器：模型读取图片时可点击放大，并在界面上浏览工作区里的图片",
+  "description": "Image viewing for the dsh Web GUI: an expandable card for the model's read_image calls, a browsable index of every workspace image, and a same-origin route a reply can embed.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -12,9 +11,13 @@
     "./client": {
       "default": "./lib/client.js"
     },
+    "./cordis.patch.yml": "./cordis.patch.yml",
     "./package.json": "./package.json"
   },
   "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "platform": "web",
       "inject": []
@@ -23,12 +26,22 @@
   "files": [
     "lib/index.js",
     "lib/client.js",
-    "README.md"
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "README.i18n.yaml"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node --check lib/index.js && node --check lib/client.js",
-    "test": "node test/host.test.mjs"
+    "test": "node test/host.test.mjs && node test/client.test.mjs"
   },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "dsh-bundle",
+    "image",
+    "viewer"
+  ],
   "license": "MIT"
 }

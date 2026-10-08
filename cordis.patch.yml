@@ -1,0 +1,26 @@
+# The dsh-image-viewer bundle patch: one row, inserted over the profile's empty
+# root, that mounts this package's host half and — through the same package's
+# `dsh.client` declaration — puts its browser half on the web roster.
+#
+# This file is why `dsh plugin --profile <name> add` is the whole install: the
+# command writes the dependency, and the loader reconciles it into
+# `dsh.profile.bundles`, which is what makes this patch a layer.
+#
+# `name` is the PACKAGE name, not a path. The row resolves through the profile's
+# node_modules, which is where the install put this package. A deployment that
+# vendors the checkout instead can replace it with the absolute file URL of
+# `lib/index.js`; the loader resolves a path-like row to its nearest
+# `package.json`, so the browser half still reaches the roster.
+#
+# Bundle layers apply BEFORE the profile's own cordis.patch.yml and any --patch
+# overlay, so a deployment that wants a different `route`, extra `root`s, or a
+# different scan bound restates only those keys in a later layer.
+
+- insert:
+    - id: image-viewer
+      name: dsh-image-viewer
+      config:
+        route: /image-viewer
+        maxDepth: 6
+        maxImages: 500
+        maxDirs: 4000
