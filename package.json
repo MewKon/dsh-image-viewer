@@ -43,5 +43,9 @@
     "image",
     "viewer"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MewKon/dsh-image-viewer.git"
+  },
   "license": "MIT"
 }
