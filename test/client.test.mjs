@@ -305,6 +305,76 @@ describe('ReadImageCard', () => {
     assert.equal(textOf(link), '查看')
   })
 
+  it('shows the duration once the call settled', () => {
+    const tree = render(card, {
+      callId: 'c10',
+      toolName: 'read_image',
+      cwd: 'D:\\work',
+      block: {
+        kind: 'tool-result',
+        callId: 'c10',
+        call: { name: 'read_image', argsRaw: '{"file_path":"hero.png"}' },
+        callTime: 1_000,
+        time: 1_250,
+        content: [],
+        isError: false,
+      },
+    })
+    const duration = findAll(tree, 'span').find((node) => node.props.className === 'diw-cardDuration')
+    assert.equal(textOf(duration), '250 ms')
+  })
+
+  it('reports no duration while the call is still running', () => {
+    const tree = render(card, propsFor('hero.png'))
+    assert.equal(
+      findAll(tree, 'span').some((node) => node.props.className === 'diw-cardDuration'),
+      false,
+      'a running call has no settled duration to report',
+    )
+  })
+
+  it('expands the argument and result JSON behind the details toggle', () => {
+    const props = {
+      callId: 'c11',
+      toolName: 'read_image',
+      cwd: 'D:\\work',
+      block: {
+        kind: 'tool-result',
+        callId: 'c11',
+        call: { name: 'read_image', argsRaw: '{"file_path":"hero.png"}' },
+        callTime: 0,
+        time: 1_500,
+        content: [
+          { type: 'text', text: '图片已读取' },
+          { type: 'image', attachment: { attachmentId: 'a1' } },
+        ],
+        isError: false,
+      },
+    }
+    const collapsed = render(card, props)
+    assert.equal(textOf(collapsed).includes('图片已读取'), false, 'details must start collapsed')
+
+    const toggle = findAll(collapsed, 'button').find((node) => textOf(node) === '详情')
+    assert.equal(typeof toggle.props.onClick, 'function', 'the details toggle is not clickable')
+    toggle.props.onClick()
+
+    const opened = render(card, props)
+    const panels = findAll(opened, 'pre').map(textOf)
+    assert.equal(panels.length, 2)
+    assert.match(panels[0], /"file_path": "hero\.png"/)
+    assert.match(panels[1], /图片已读取/)
+    assert.match(panels[1], /\[image\]/)
+    assert.equal(panels[1].includes('attachmentId'), false, 'a live attachment reference must never be serialized')
+  })
+
+  it('keeps the details toggle on the degraded path', () => {
+    const props = { callId: 'c12', toolName: 'read_image', block: { argsRaw: '{"file_path":"a/b"}' } }
+    const collapsed = render(card, props)
+    assert.equal(findAll(collapsed, 'img').length, 0)
+    findAll(collapsed, 'button').find((node) => textOf(node) === '详情').props.onClick()
+    assert.match(findAll(render(card, props), 'pre').map(textOf).join('\n'), /"file_path": "a\/b"/)
+  })
+
   it('degrades instead of rendering a broken thumbnail for an extensionless path', () => {
     const tree = render(card, propsFor('.dsh/attachments/ab12cd'))
     assert.equal(findAll(tree, 'img').length, 0)

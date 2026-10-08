@@ -7,5 +7,5 @@
 #
 # A hash that no longer matches `git ls-tree HEAD README.md` means the pair is
 # out of sync — one side was edited without the other.
-README.md: 98f2183de57b99c30b567c0beffdd4cbd14f808e
-README.zh.md: 4c4d6ab38d56d2438d221e2f7b71ad4e837048ee
+README.md: 6726d0916564025676c6b8c2b03c92e3d28de239
+README.zh.md: 13a1dde62bc53d0c829f84b20d471192fea275bd
