@@ -1,0 +1,12 @@
+# Keep LF in the repository AND in the working tree. `lib/` is a byte-for-byte
+# copy of `src/`, so a checkout that rewrote line endings would make the two
+# disagree and turn every build into a whole-file diff.
+* text=auto eol=lf
+
+# Binary if either half ever serves one.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary

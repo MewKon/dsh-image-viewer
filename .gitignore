@@ -1,0 +1,19 @@
+# Dependencies — this package has none, but a checkout may grow some.
+node_modules/
+
+# Editor and OS noise.
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Local scratch: anything you use to try things out.
+scratch/
+*.local.*
+
+# `lib/` is DELIBERATELY TRACKED. It is not a build cache here: the DSH profile
+# points at `lib/index.js`, and the browser half is served from `lib/client.js`,
+# so a clone that skipped it could not be mounted at all. The build is a
+# validated copy of `src/`, which is why both appear in every diff — run
+# `npm run build` before committing a source change.
